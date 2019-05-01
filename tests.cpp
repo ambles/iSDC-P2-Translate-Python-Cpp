@@ -1,6 +1,10 @@
 #include <iostream>
+#include <vector>
+
+#include "helpers.h"
+#include "debugging_helpers.h"
+#include "localizer.h"
 #include "tests.h"
-#include "simulate.cpp"
 
 using namespace std;
 
@@ -106,7 +110,7 @@ bool test_helpers() {
 		correct = false;
 	}
 	return correct;
-	
+
 }
 
 
@@ -116,7 +120,7 @@ bool test_initialize() {
 	vector < vector <float> > beliefs, correct;
 	beliefs = initialize_beliefs(map);
 
-	int h, w, A; 
+	int h, w, A;
 	float belief;
 
 	h = map.size();
@@ -282,5 +286,5 @@ bool test_localizer() {
 }
 
 // bool test_simulation() {
-// 	// todo 
+// 	// todo
 // }
