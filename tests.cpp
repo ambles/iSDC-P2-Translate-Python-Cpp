@@ -41,11 +41,11 @@ bool test_normalize() {
 	else {
 		cout << "X - normalize function did not work correctly.\n";
 		cout << "For the following input:\n\n";
-		show_grid(unnormalized);
+		show_grid_t(unnormalized);
 		cout << "\nYour code returned the following:\n\n";
-		show_grid(result);
+		show_grid_t(result);
 		cout << "\nWhen it should have returned the following:\n";
-		show_grid(normalized);
+		show_grid_t(normalized);
 	}
 	return correct;
 }
@@ -74,7 +74,11 @@ bool test_blur() {
 	correct[2][2] = corner;
 
 	out = blur(in, 0.12);
-
+/*
+	show_grid_t(in);
+	show_grid_t(out);
+	show_grid_t(correct);
+*/
 	bool right;
 	right = close_enough(correct, out);
 
@@ -84,11 +88,11 @@ bool test_blur() {
 	else {
 		cout << "X - blur function did not work correctly.\n";
 		cout << "For the following input:\n\n";
-		show_grid(in);
+		show_grid_t(in);
 		cout << "\nYour code returned the following:\n\n";
-		show_grid(out);
+		show_grid_t(out);
 		cout << "\nWhen it should have returned the following:\n";
-		show_grid(correct);
+		show_grid_t(correct);
 	}
 
 	return right;
@@ -156,11 +160,11 @@ bool test_initialize() {
 	else {
 		cout << "X - initialize_beliefs function did not work correctly.\n";
 		cout << "For the following input:\n\n";
-		show_grid(map);
+		show_grid_t(map);
 		cout << "\nYour code returned the following:\n\n";
-		show_grid(beliefs);
+		show_grid_t(beliefs);
 		cout << "\nWhen it should have returned the following:\n";
-		show_grid(correct);
+		show_grid_t(correct);
 	}
 
 	return right;
@@ -190,11 +194,11 @@ bool test_move() {
 	else {
 		cout << "X - move function did not work correctly.\n";
 		cout << "When dx=1, dy=1, blurring=0.0 and with\nthe following beliefs:\n\n";
-		show_grid(in);
+		show_grid_t(in);
 		cout << "\nYour code returned the following:\n\n";
-		show_grid(out);
+		show_grid_t(out);
 		cout << "\nWhen it should have returned the following:\n";
-		show_grid(correct);
+		show_grid_t(correct);
 	}
 	return right;
 }
@@ -255,9 +259,9 @@ bool test_sense() {
 	else {
 		cout << "X - sense function did not work correctly.\n";
 		cout << "When p_hit=2.0, p_miss=1.0 and with\nthe following beliefs:\n\n";
-		show_grid(in);
+		show_grid_t(in);
 		cout << "\nYour code returned the following:\n\n";
-		show_grid(out);
+		show_grid_t(out);
 		cout << "\nbut this is incorrect.\n";
 	}
 	return right;

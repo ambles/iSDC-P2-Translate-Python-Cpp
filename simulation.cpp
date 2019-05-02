@@ -33,7 +33,7 @@ int main() {
 	cout << "map is\n";
 	Simulation simulation (map, 0.1, 0.9, pose);
 	cout << "initialization success!\n";
-	show_grid(map);
+	show_grid_t(map);
 
 	cout << "x, y = (" << simulation.true_pose[0] << ", " << simulation.true_pose[1] << ")" << endl;
 	return 0;
