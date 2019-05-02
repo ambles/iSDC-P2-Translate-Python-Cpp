@@ -16,7 +16,7 @@
 #include <string>
 #include <fstream>
 #include "helpers.h"
-// #include "debugging_helpers.cpp"
+#include "debugging_helpers.h"
 
 using namespace std;
 
@@ -33,12 +33,28 @@ using namespace std;
     	   all probabilities is equal to one.
 */
 vector< vector<float> > normalize(vector< vector <float> > grid) {
+	// assuming grid is passed by value (not by reference)
 
-	vector< vector<float> > newGrid;
+	assert(grid.size() > 0);
+	const size_t height = grid.size();
+  const size_t width = grid[0].size();
 
-	// todo - your code here
+	float total = 0.0;
+	size_t i, j;
 
-	return newGrid;
+	for (i = 0; i < height; i++) {
+		for (j = 0;  j< width; j++) {
+			total += grid[i][j];
+		}
+	}
+
+	for (i = 0; i < height; i++) {
+	  for (j = 0; j <  width; j++) {
+			grid[i][j] /= total;
+	  }
+	}
+
+	return grid;
 }
 
 /**
@@ -76,10 +92,37 @@ vector< vector<float> > normalize(vector< vector <float> > grid) {
 */
 vector < vector <float> > blur(vector < vector < float> > grid, float blurring) {
 
-	vector < vector <float> > newGrid;
+	assert(grid.size() > 0);
 
-	// your code here
+	const float center_prob = 1.0-blurring;
+	const float corner_prob = blurring / 12.0;
+	const float adjacent_prob = blurring / 6.0;
 
+	const float window[3][3] = {
+		{corner_prob,  adjacent_prob,  corner_prob},
+		{adjacent_prob, center_prob,  adjacent_prob},
+		{corner_prob,  adjacent_prob,  corner_prob}
+	};
+
+  size_t  new_i, new_j;
+	float mult, grid_val;
+
+	const size_t height = grid.size();
+	const size_t width  = grid[0].size();
+	vector < vector <float> > newGrid = zeros(height, width);
+  for (size_t i = 0; i < height; i++) {
+    for (size_t j = 0; j < width; j++) {
+			grid_val = grid[i][j];
+			for (size_t dx = -1; dx < 3; dx++) {
+				for (size_t dy = -1; dy < 3; dy++) {
+					mult = window[dx+1][dy+1];
+					new_i = (i + dy + height) % height;
+					new_j = (j + dx + width) % width;
+					newGrid[new_i][new_j] += mult * grid_val;
+				}
+			}
+    }
+  }
 	return normalize(newGrid);
 }
 
@@ -202,13 +245,12 @@ vector < vector <char> > read_map(string file_name) {
     @return a grid of zeros (floats)
 */
 vector < vector <float> > zeros(int height, int width) {
-	int i, j;
 	vector < vector <float> > newGrid;
 	vector <float> newRow;
 
-	for (i=0; i<height; i++) {
+	for (size_t i = 0; i < height; i++) {
 		newRow.clear();
-		for (j=0; j<width; j++) {
+		for (size_t j = 0; j < width; j++) {
 			newRow.push_back(0.0);
 		}
 		newGrid.push_back(newRow);

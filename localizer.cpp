@@ -14,6 +14,8 @@
 #include "localizer.h"
 #include <stdlib.h>
 #include "helpers.h"
+#include "debugging_helpers.h"
+#include <iostream>
 
 using namespace std;
 
@@ -39,13 +41,22 @@ using namespace std;
            0.25 0.25
 */
 vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
-	vector< vector <float> > newGrid;
 
-    // TODO: your code here
-
-	return newGrid;
+  assert (grid.size() > 0);
+  size_t height = grid.size();
+  size_t width = grid[0].size();
+  // NOTE: the follow initialize newGrid a heigth x width zero matrix
+  float prob_per_cell = 1.0 / ( (float) height * width) ;
+  vector< vector <float> > beliefs(height,vector<float>(width, prob_per_cell));
+/*
+  for (size_t i = 0; i < height; i++) {
+    for (size_t j = 0; j < width; j++) {
+      newGrid[i][j] = prob_per_cell;
+    }
+  }
+  */
+  return beliefs;
 }
-
 /**
   TODO - implement this function
 
@@ -87,12 +98,21 @@ vector< vector <float> > move(int dy, int dx,
   vector < vector <float> > beliefs,
   float blurring)
 {
+   assert (beliefs.size() > 0);
+   const size_t height = beliefs.size();
+   const size_t width = beliefs[0].size();
 
-  vector < vector <float> > newGrid;
+   vector < vector <float> > new_G = zeros(height, width);
 
-  // your code here
-
-  return blur(newGrid, blurring);
+   size_t new_i, new_j;
+   for (size_t i = 0; i < height; ++i) {
+     for (size_t j = 0; j < width; ++j) {
+       new_i = (i + dy + height) % height;
+       new_j = (j + dx + width)  % width;
+       new_G[new_i][new_j] = beliefs[i][j];
+      }
+   }
+   return blur(new_G, blurring);
 }
 
 
@@ -139,9 +159,18 @@ vector< vector <float> > sense(char color,
 	float p_hit,
 	float p_miss)
 {
-	vector< vector <float> > newGrid;
+  assert (grid.size() > 0);
+  assert (beliefs.size() > 0);
+  const size_t height = beliefs.size();
+  const size_t width = beliefs[0].size();
 
-	// your code here
+  vector < vector <float> > new_beliefs = zeros(height, width);
 
-	return normalize(newGrid);
+  for (size_t i = 0; i < height; ++i) {
+    for (size_t j = 0; j < width; ++j) {
+      new_beliefs[i][j] = beliefs[i][j] * ((grid[i][j] != color) ? p_miss : p_hit);
+    }
+  }
+
+	return normalize(new_beliefs);
 }
