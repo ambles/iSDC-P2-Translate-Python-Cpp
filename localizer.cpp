@@ -40,7 +40,7 @@ using namespace std;
            0.25 0.25
            0.25 0.25
 */
-vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
+vector< vector <float> > initialize_beliefs(const vector< vector <char> > &grid) {
 
   assert (grid.size() > 0);
   size_t height = grid.size();
@@ -94,15 +94,15 @@ vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
     @return - a normalized two dimensional grid of floats
          representing the updated beliefs for the robot.
 */
-vector< vector <float> > move(int dy, int dx,
-  vector < vector <float> > beliefs,
-  float blurring)
+vector< vector <float> > move(const int dy, const int dx,
+  const vector < vector <float> > &beliefs,
+  const float blurring)
 {
    assert (beliefs.size() > 0);
    const size_t height = beliefs.size();
    const size_t width = beliefs[0].size();
 
-   vector < vector <float> > new_G = zeros(height, width);
+   vector < vector <float> > new_G(height,vector<float>(width));
 
    size_t new_i, new_j;
    for (size_t i = 0; i < height; ++i) {
@@ -153,18 +153,18 @@ vector< vector <float> > move(int dy, int dx,
     @return - a normalized two dimensional grid of floats
     	   representing the updated beliefs for the robot.
 */
-vector< vector <float> > sense(char color,
-	vector< vector <char> > grid,
-	vector< vector <float> > beliefs,
-	float p_hit,
-	float p_miss)
+vector< vector <float> > sense(const char color,
+	const vector< vector <char> > &grid,
+	const vector< vector <float> > &beliefs,
+	const float p_hit,
+	const float p_miss)
 {
   assert (grid.size() > 0);
   assert (beliefs.size() > 0);
   const size_t height = beliefs.size();
   const size_t width = beliefs[0].size();
 
-  vector < vector <float> > new_beliefs = zeros(height, width);
+  vector < vector <float> > new_beliefs(height,vector<float>(width));
 
   for (size_t i = 0; i < height; ++i) {
     for (size_t j = 0; j < width; ++j) {

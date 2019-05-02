@@ -32,29 +32,31 @@ using namespace std;
     @return - a new normalized two dimensional grid where the sum of
     	   all probabilities is equal to one.
 */
-vector< vector<float> > normalize(vector< vector <float> > grid) {
+vector< vector<float> > normalize(const vector< vector <float> > &grid) {
 	// assuming grid is passed by value (not by reference)
 
 	assert(grid.size() > 0);
 	const size_t height = grid.size();
   const size_t width = grid[0].size();
 
+	vector < vector <float> > newGrid(height,vector<float>(width));
 	float total = 0.0;
 	size_t i, j;
 
 	for (i = 0; i < height; i++) {
 		for (j = 0;  j< width; j++) {
 			total += grid[i][j];
+			newGrid[i][j] = grid[i][j];
 		}
 	}
 
 	for (i = 0; i < height; i++) {
 	  for (j = 0; j <  width; j++) {
-			grid[i][j] /= total;
+			newGrid[i][j] /= total;
 	  }
 	}
 
-	return grid;
+	return newGrid;
 }
 
 /**
@@ -90,7 +92,7 @@ vector< vector<float> > normalize(vector< vector <float> > grid) {
     @return - a new normalized two dimensional grid where probability
     	   has been blurred.
 */
-vector < vector <float> > blur(vector < vector < float> > grid, float blurring) {
+vector < vector <float> > blur(const vector < vector < float> > &grid, const float blurring) {
 
 	assert(grid.size() > 0);
 
@@ -109,12 +111,12 @@ vector < vector <float> > blur(vector < vector < float> > grid, float blurring) 
 
 	const size_t height = grid.size();
 	const size_t width  = grid[0].size();
-	vector < vector <float> > newGrid = zeros(height, width);
+	vector < vector <float> > newGrid(height,vector<float>(width));
   for (size_t i = 0; i < height; i++) {
     for (size_t j = 0; j < width; j++) {
 			grid_val = grid[i][j];
-			for (size_t dx = -1; dx < 3; dx++) {
-				for (size_t dy = -1; dy < 3; dy++) {
+			for (int dx = -1; dx < 2; dx++) {
+				for (int dy = -1; dy < 2; dy++) {
 					mult = window[dx+1][dy+1];
 					new_i = (i + dy + height) % height;
 					new_j = (j + dx + width) % width;
@@ -161,6 +163,9 @@ bool close_enough(vector < vector <float> > g1, vector < vector <float> > g2) {
 		for (j=0; j<g1[0].size(); j++) {
 			v1 = g1[i][j];
 			v2 = g2[i][j];
+			if (isnan(v1) || isnan(v2)) {
+				return false;
+			}
 			if (abs(v2-v1) > 0.0001 ) {
 				return false;
 			}
@@ -244,7 +249,7 @@ vector < vector <char> > read_map(string file_name) {
 
     @return a grid of zeros (floats)
 */
-vector < vector <float> > zeros(int height, int width) {
+vector < vector <float> > zeros(const int height, const int width) {
 	vector < vector <float> > newGrid;
 	vector <float> newRow;
 
